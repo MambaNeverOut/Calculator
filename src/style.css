@@ -1,0 +1,55 @@
+.calculation {
+  margin: 20px auto;
+  width: 80vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.view {
+  height: 20vh;
+  border: 1px solid grey;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.process {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 10px 20px;
+  height: 10vh;
+  overflow: auto;
+}
+
+.result {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 16px;
+  height: 10vh;
+}
+
+.keyboard {
+  display: flex;
+}
+
+.keyboard li {
+  border: 1px solid grey;
+  width: 20vw;
+  height: 8vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  background: white;
+  color: black;
+}
+
+.keyboard li:hover {
+  background-color: gray;
+}
+
+.number ul {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
