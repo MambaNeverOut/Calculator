@@ -1,5 +1,8 @@
-class Model {
+import EventBus from "./EventBus"
+
+class Model extends EventBus {
   constructor(options) {
+    super();
     ['data', 'create', 'delete', 'update', 'get'].forEach((key) => {
       if (key in options) {
         this[key] = options[key]
@@ -19,5 +22,6 @@ class Model {
     console && console.error && console.error('还没有get方法')
   }
 }
+
 
 export default Model;
