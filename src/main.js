@@ -1,23 +1,23 @@
 import $ from "jquery";
 import "./style.css";
+import Model from './base/Model.js';
+import View from './base/View.js'
 
 const eventBus = $(window);
-const m = {
+const m = new Model({
   data: {
-    // result: parseInt(localStorage.getItem("result")) || 0,
     formula: localStorage.getItem("formula") || "",
     result: localStorage.getItem("result") || ""
-    // formula: localStorage.getItem("formula") || 0
   },
   update(data) {
     Object.assign(m.data, data);
     eventBus.trigger("m:updated");
     localStorage.setItem("formula", m.data.formula);
     localStorage.setItem("result", m.data.result);
-  }
-};
+  },
+})
 
-const v = {
+const view = {
   el: null,
   html: `
   <div class="calculation">
@@ -58,27 +58,21 @@ const v = {
   </div>
   `,
   init(container) {
-    v.el = $(container);
+    view.el = $(container);
+    view.render(m.data);
+    view.autoBindEvents();
+    eventBus.on("m:updated", () => {
+      view.render(m.data);
+      view.autoBindEvents();
+    });
   },
   render(data) {
-    if (v.el.children.length !== 0) v.el.empty();
+    if (view.el.children.length !== 0) view.el.empty();
     $(
-      v.html
-        .replace("{{formula}}", data.formula)
-        .replace("{{result}}", data.result)
-    ).appendTo(v.el);
-  }
-};
-
-const c = {
-  init(container) {
-    v.init(container);
-    v.render(m.data);
-    c.autoBindEvents();
-    eventBus.on("m:updated", () => {
-      v.render(m.data);
-      c.autoBindEvents();
-    });
+      view.html
+      .replace("{{formula}}", data.formula)
+      .replace("{{result}}", data.result)
+    ).appendTo(view.el);
   },
   events: {
     add: "add", // +
@@ -123,8 +117,6 @@ const c = {
     });
   },
   clear() {
-    console.log(m.data.result);
-    console.log(m.data.formula);
     m.update({
       formula: "",
       result: ""
@@ -165,11 +157,10 @@ const c = {
     const $liList = Array.from($(".number ul").find("li"));
     $liList.forEach((item, index) => {
       $(item).on("click", e => {
-        for (let key in c.events) {
+        for (let key in view.events) {
           if (e.currentTarget.id === key) {
             // 如果点击的元素的id在events中找到了，则调用对应的函数
-            console.log(item.innerText);
-            c[c.events[key]](item);
+            view[view.events[key]](item);
             return;
           }
         }
@@ -182,4 +173,4 @@ const c = {
   }
 };
 
-c.init("#app");
+view.init("#app");
